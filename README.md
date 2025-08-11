@@ -67,9 +67,59 @@ Os alunos devem simular a alocação dos processos na RAM usando o algoritmo **b
 ## Resposta
 
 ### 1. Alocação Inicial com Best-Fit
+Estado inicial: Memória RAM [0 – 64 KB] livre.
+
+**Passo a passo da alocação:**
+
+1. **P1 (20 KB)** → Menor bloco que comporta é [0–64] (64 KB) → aloca em [0 – 20].  
+   Livre: [20 – 64] (44 KB).
+
+2. **P2 (15 KB)** → Menor bloco é [20–64] (44 KB) → aloca em [20 – 35].  
+   Livre: [35 – 64] (29 KB).
+
+3. **P3 (25 KB)** → Menor bloco é [35–64] (29 KB) → aloca em [35 – 60].  
+   Livre: [60 – 64] (4 KB).
+
+4. **P4 (10 KB)** → Menor bloco livre tem 4 KB, não cabe → vai para disco.
+
+5. **P5 (18 KB)** → Menor bloco livre tem 4 KB, não cabe → vai para disco.
+
+**Resumo da RAM após alocação:**  
+[0–20: **P1**] [20–35: **P2**] [35–60: **P3**] [60–64: **Livre**]
+
+---
 
 ### 2. Simular Memória Virtual (Paginação)
+Considerando páginas de 4 KB:
+
+| Processo | Tamanho (KB) | Nº de Páginas | Localização |
+|----------|--------------|--------------|-------------|
+| P1       | 20           | 5            | RAM (0–20 KB) |
+| P2       | 15           | 4            | RAM (20–35 KB) |
+| P3       | 25           | 7            | RAM (35–60 KB) |
+| P4       | 10           | 3            | Disco |
+| P5       | 18           | 5            | Disco |
+
+---
 
 ### 3. Desfragmentação da RAM
+**Antes:**  
+[0–20: P1] [20–35: P2] [35–60: P3] [60–64: Livre]  
 
- ### 4. Questões para Reflexão
+**Depois:**  
+[0–60: P1, P2, P3] [60–64: Livre]
+
+Após desfragmentação, ainda restam apenas 4 KB livres, insuficientes para alocar P4 (10 KB) ou P5 (18 KB) integralmente sem realizar swap de algum processo.
+
+---
+
+### 4. Questões para Reflexão
+
+**1. Best-fit foi mais eficiente que first-fit ou worst-fit neste cenário?**  
+Sim, o Best-Fit aproveitou melhor o espaço disponível no momento da alocação, reduzindo o desperdício interno. Porém, como a soma dos processos excedia a RAM, a fragmentação e a limitação física impediram que todos fossem alocados.
+
+**2. Como a memória virtual evitou um deadlock?**  
+A memória virtual permitiu que processos que não cabiam na RAM fossem armazenados no disco, garantindo que o sistema pudesse continuar executando sem que todos os processos ficassem bloqueados esperando espaço físico.
+
+**3. Qual o impacto da desfragmentação no desempenho do sistema?**  
+A desfragmentação melhora o aproveitamento da RAM e pode permitir novas alocações contíguas, mas exige movimentação de dados, consumindo tempo de CPU e podendo causar pausas no sistema durante o processo.
